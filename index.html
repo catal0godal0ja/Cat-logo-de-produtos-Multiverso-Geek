@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeekStore | Catálogo Online</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <h1 class="logo">GEEK<span>STORE</span></h1>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="O que você procura?">
+            </div>
+            <button id="openAdmin" class="btn-admin-icon">⚙️</button>
+        </div>
+    </header>
+
+    <!-- Categorias -->
+    <nav class="categories">
+        <div class="container nav-scroll" id="categoryList">
+            <button class="cat-btn active" data-category="todos">Todos</button>
+            <!-- Inserido via JS -->
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="container">
+        <div id="productGrid" class="product-grid">
+            <!-- Cards de produtos via JS -->
+        </div>
+        <div id="noResults" class="hidden">Nenhum produto encontrado.</div>
+    </main>
+
+    <!-- Modal Administrativo -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Gerenciar Catálogo</h2>
+                <span class="close">&times;</span>
+            </div>
+            
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label>Nome do Produto</label>
+                    <input type="text" id="pName" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Preço (R$)</label>
+                        <input type="number" step="0.01" id="pPrice" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select id="pCategory" required></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL da Imagem</label>
+                    <input type="url" id="pImage" placeholder="https://..." required>
+                </div>
+                <div class="form-group">
+                    <label>Descrição Curta</label>
+                    <input type="text" id="pDesc">
+                </div>
+                <button type="submit" id="saveBtn" class="btn-save">Salvar Produto</button>
+            </form>
+
+            <hr>
+            <h3>Produtos Cadastrados</h3>
+            <div class="admin-table-container">
+                <table id="adminTable">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Preço</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminProductList"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 GeekStore - Catálogo Digital</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
