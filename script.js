@@ -1,23 +1,24 @@
 // =========================================================
-// 1. LISTA DE PRODUTOS OFICIAIS (O que o cliente vê)
-// Cole aqui o código gerado pelo botão "Gerar Código para Publicar"
-// =========================================================
-const officialProducts = [
-    // Seus produtos aparecerão aqui depois que você exportar
-];
-
-// =========================================================
-// CONFIGURAÇÕES E LÓGICA
+// 1. CONFIGURAÇÕES DA LOJA
 // =========================================================
 
+// COLOQUE SEU NÚMERO AQUI (Exemplo: 55 + DDD + Número)
+const WHATSAPP_NUMBER = "555599185-0704"; 
+
+// LISTA DE PRODUTOS OFICIAIS (Cole aqui o código exportado quando for publicar)
+const officialProducts = [];
+
+// Lista de Categorias Atualizada
 const initialCategories = [
-    "Mangás", "HQs", "Livros", "Pokémon TCG", "Yu-Gi-Oh! TCG", 
-    "Magic: The Gathering", "Action Figures", "Funko Pop", 
-    "Videogames", "Colecionáveis", "Acessórios", "Promoções"
+    "Mangás", "HQs", "Livros", "Pokémon TCG", "Card Games", "Snacks",
+    "Action Figures", "Funko Pop", "Videogames", "Eletrônicos", 
+    "Colecionáveis", "Acessórios"
 ];
 
-// Carrega os produtos: Prioriza o que está no LocalStorage (para você editar) 
-// ou o que está na lista oficial (para o cliente ver)
+// =========================================================
+// 2. LÓGICA DO SISTEMA
+// =========================================================
+
 let products = JSON.parse(localStorage.getItem('geekStore_products')) || officialProducts;
 let currentCategory = 'todos';
 
@@ -35,20 +36,23 @@ function init() {
     setupAdminSecurity();
 }
 
-// Segurança: O botão Admin só aparece se você digitar "admin123" na busca
+// SEGURANÇA: A senha agora é "admgeek"
 function setupAdminSecurity() {
     const adminBtn = document.getElementById('openAdmin');
-    adminBtn.style.display = 'none'; // Esconde por padrão
+    adminBtn.style.display = 'none'; 
     
     searchInput.addEventListener('input', (e) => {
-        if(e.target.value === 'admin123') { // ESSA É A SUA SENHA
+        if(e.target.value === 'admgeek') { // NOVA SENHA
             adminBtn.style.display = 'block';
-            alert('Modo Administrador Ativado!');
+            alert('Modo Administrador Ativado! Use o botão de engrenagem para gerenciar.');
         }
     });
 }
 
 function renderCategories() {
+    // Mantém o botão "Todos" e adiciona as outras
+    categoryList.innerHTML = '<button class="cat-btn active" onclick="filterCategory(\'todos\', this)">Todos</button>';
+    
     initialCategories.forEach(cat => {
         const btn = document.createElement('button');
         btn.className = 'cat-btn';
@@ -60,6 +64,7 @@ function renderCategories() {
 
 function populateCategorySelect() {
     const select = document.getElementById('pCategory');
+    select.innerHTML = ''; // Limpa antes de carregar
     initialCategories.forEach(cat => {
         const option = document.createElement('option');
         option.value = cat;
@@ -83,19 +88,35 @@ function renderProducts() {
         return matchesCategory && matchesSearch;
     });
 
-    productGrid.innerHTML = filtered.map(p => `
+    if (filtered.length === 0) {
+        productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 50px;">Nenhum produto encontrado nesta categoria.</p>';
+        return;
+    }
+
+    productGrid.innerHTML = filtered.map(p => {
+        // Criar o link do WhatsApp para cada produto
+        const mensagem = encodeURIComponent(`Olá! Tenho interesse no produto: ${p.name}`);
+        const zapLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${mensagem}`;
+
+        return `
         <div class="product-card">
             <img src="${p.image}" class="product-img" onerror="this.src='https://via.placeholder.com/300?text=Sem+Imagem'">
             <div class="product-info">
+                <small style="color: var(--primary)">${p.category}</small>
                 <h3>${p.name}</h3>
                 <div class="product-price">R$ ${parseFloat(p.price).toFixed(2).replace('.', ',')}</div>
                 <p class="product-desc">${p.description || ''}</p>
+                
+                <!-- BOTÃO DO WHATSAPP -->
+                <a href="${zapLink}" target="_blank" class="btn-buy-zap">
+                   📱 Comprar no WhatsApp
+                </a>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 }
 
-// FUNÇÕES DE GERENCIAMENTO
+// GERENCIAMENTO
 document.getElementById('openAdmin').onclick = () => adminModal.style.display = 'block';
 document.querySelector('.close').onclick = () => adminModal.style.display = 'none';
 
@@ -117,9 +138,10 @@ productForm.onsubmit = (e) => {
     saveAndRefresh();
     productForm.reset();
     document.getElementById('productId').value = '';
+    alert('Produto salvo com sucesso!');
 };
 
-// NOVO: BOTÃO DE EXPORTAR PARA O GITHUB
+// BOTÃO DE EXPORTAR
 const exportBtn = document.createElement('button');
 exportBtn.textContent = "📦 Gerar Código para Publicar";
 exportBtn.className = "btn-save";
@@ -133,12 +155,12 @@ exportBtn.onclick = () => {
     textArea.select();
     document.execCommand('copy');
     document.body.removeChild(textArea);
-    alert('Código copiado! Agora abra seu script.js e cole dentro de "const officialProducts = [ ... ]"');
+    alert('Código copiado! Abra seu script.js e cole na "const officialProducts = [ ... ]"');
 };
 document.querySelector('.modal-content').appendChild(exportBtn);
 
 function deleteProduct(id) {
-    if(confirm('Excluir?')) {
+    if(confirm('Tem certeza que deseja excluir este produto?')) {
         products = products.filter(p => p.id != id);
         saveAndRefresh();
     }
@@ -152,6 +174,7 @@ function editProduct(id) {
     document.getElementById('pCategory').value = p.category;
     document.getElementById('pImage').value = p.image;
     document.getElementById('pDesc').value = p.description;
+    alert('Edite os campos no formulário acima.');
 }
 
 function renderAdminTable() {
