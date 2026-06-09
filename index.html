@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeekStore | Catálogo Online</title>
+    <title>MultiversoGeek | Catálogo Online</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,11 +14,16 @@
     <!-- Header -->
     <header>
         <div class="container header-content">
-            <h1 class="logo">GEEK<span>STORE</span></h1>
+            <!-- LOGO PERSONALIZADA -->
+            <a href="index.html" class="logo-container">
+                <img src="logo.png" alt="GeekStore Logo" class="main-logo">
+            </a>
+
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="O que você procura?">
             </div>
-            <button id="openAdmin" class="btn-admin-icon">⚙️</button>
+            
+            <button id="openAdmin" class="btn-admin-icon" title="Área do Administrador">⚙️</button>
         </div>
     </header>
 
@@ -26,7 +31,7 @@
     <nav class="categories">
         <div class="container nav-scroll" id="categoryList">
             <button class="cat-btn active" data-category="todos">Todos</button>
-            <!-- Inserido via JS -->
+            <!-- As categorias serão inseridas automaticamente pelo script.js -->
         </div>
     </nav>
 
@@ -91,7 +96,7 @@
     </div>
 
     <footer>
-        <p>&copy; 2023 GeekStore - Catálogo Digital</p>
+        <p>&copy; 2026 MultiversoGeek - Catálogo Digital</p>
     </footer>
 
     <script src="script.js"></script>
