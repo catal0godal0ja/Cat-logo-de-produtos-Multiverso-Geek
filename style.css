@@ -29,32 +29,50 @@ body {
     padding: 0 20px;
 }
 
-/* Ajuste do Cabeçalho para aceitar logos maiores */
-header {
-    background: rgba(15, 23, 42, 0.9);
-    backdrop-filter: blur(10px);
-    padding: 20px 0; /* Aumentei o respiro em cima e embaixo */
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-bottom: 1px solid #334155;
-    min-height: 80px; /* Garante uma altura mínima para o topo */
+/* 1. Organiza o cabeçalho em uma linha só */
+.header-content {
+    display: flex;
+    flex-direction: row;      /* Força os itens a ficarem em linha */
+    justify-content: space-between;
+    align-items: center;      /* Alinha todos verticalmente pelo meio */
+    gap: 20px;                /* Espaço entre a logo e a pesquisa */
+    flex-wrap: nowrap;        /* Proíbe que os itens pulem para a linha de baixo */
 }
 
+/* 2. Ajusta o espaço da logo para não empurrar a pesquisa */
 .logo-container {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    min-width: 150px; /* Garante um espaço mínimo na largura */
+    flex-shrink: 0;           /* Impede que a logo seja esmagada */
+    max-width: 200px;         /* Limita a largura máxima da logo na linha */
 }
 
 .main-logo {
-    height: auto !important;      /* Força a altura ser automática */
-    max-height: 200px !important; /* Aumentei para 120px - quase 3x o que estava antes */
+    height: auto;
+    max-height: 80px;         /* Ajustamos para 80px para caber bem na linha */
     width: auto;
-    max-width: 330px;             /* Permite que ela seja larga também */
-    object-fit: contain;
     display: block;
+}
+
+/* 3. Faz a barra de pesquisa ocupar o resto do espaço */
+.search-bar {
+    flex-grow: 1;             /* Faz a barra de pesquisa "esticar" para preencher o meio */
+    min-width: 150px;         /* Garante que ela não fique minúscula */
+}
+
+/* 4. IMPORTANTE: Ajuste para Celular */
+@media (max-width: 600px) {
+    .header-content {
+        flex-direction: row;  /* Mantém em linha mesmo no celular */
+        gap: 10px;
+    }
+    
+    .main-logo {
+        max-height: 50px;     /* Diminui um pouco no celular para sobrar espaço para a busca */
+    }
+    
+    .search-bar input {
+        padding: 8px 15px;    /* Diminui o tamanho da barra no celular */
+        font-size: 0.8rem;
+    }
 }
 }
 
