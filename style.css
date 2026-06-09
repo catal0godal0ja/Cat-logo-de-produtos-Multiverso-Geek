@@ -33,20 +33,27 @@ header {
 .logo-container { flex-shrink: 0; }
 .main-logo {
     height: auto;
-    max-height: 80px; /* Tamanho ajustado */
+    max-height: 200px; /* Tamanho ajustado */
     width: auto;
-    max-width: 180px;
+    max-width: 330px;
     display: block;
 }
 
-.search-bar { flex-grow: 1; }
+.search-bar { 
+    flex-grow: 0;        /* 1. Faz ela parar de esticar para ocupar todo o espaço */
+    width: 250px;        /* 2. Define uma largura fixa menor (ajuste esse número se quiser) */
+    max-width: 50%;      /* 3. Garante que ela não ocupe mais que metade da tela */
+}
+
 .search-bar input {
     width: 100%;
-    padding: 10px 15px;
+    padding: 6px 15px;   /* 4. Diminuímos de 10px para 6px para ela ficar mais "fininha" */
     border-radius: 50px;
     border: none;
     background: #1e293b;
     color: white;
+    font-size: 0.85rem;  /* 5. Letra um pouco menor para combinar com a barra menor */
+}
 }
 
 #openAdmin {
