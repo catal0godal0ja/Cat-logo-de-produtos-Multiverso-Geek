@@ -19,23 +19,23 @@ function init() {
     setupImageReader();
 }
 
-// LÓGICA DE SEGURANÇA E ADMIN
 function setupAdminLogic() {
     const adminBtn = document.getElementById('openAdmin');
     const searchInput = document.getElementById('searchInput');
     const modal = document.getElementById('adminModal');
 
-    // Só mostra a engrenagem se digitar a senha na busca
+    // Escuta o que você digita na barra de pesquisa
     searchInput.addEventListener('input', (e) => {
         if(e.target.value === 'admgeek') {
-            adminBtn.style.display = 'block';
+            // Este comando "força" a engrenagem a aparecer
+            adminBtn.style.setProperty('display', 'block', 'important');
             alert('Acesso Administrador Liberado!');
         }
     });
 
     adminBtn.onclick = () => {
         modal.style.display = 'block';
-        renderAdminTable();
+        if(typeof renderAdminTable === "function") renderAdminTable();
     };
 }
 
