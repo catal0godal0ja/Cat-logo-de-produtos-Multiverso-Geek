@@ -54,11 +54,15 @@ header {
     color: white;
     font-size: 0.85rem;  /* 5. Letra um pouco menor para combinar com a barra menor */
 }
-}
 
 #openAdmin {
-    display: none; /* Escondido por padrão */
-    background: none; border: none; font-size: 1.5rem; cursor: pointer;
+    display: none !important; /* ISSO AQUI ESCONDE O BOTÃO POR PADRÃO */
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    flex-shrink: 0;
+
 }
 
 /* NAVEGAÇÃO */
