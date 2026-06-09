@@ -3,74 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MultiversoGeek | Catálogo Digital</title>
+    <title>MultiversoGeek | Catálogo</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <header>
         <div class="container header-content">
             <a href="index.html" class="logo-container">
-                <img src="logo.png" alt="Logo MultiversoGeek" class="main-logo">
+                <img src="logo.png" alt="Logo" class="main-logo">
             </a>
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="O que você procura?">
+                <input type="text" id="searchInput" placeholder="Pesquisar...">
             </div>
             <button id="openAdmin">⚙️</button>
         </div>
     </header>
 
     <nav class="categories">
-        <div class="container nav-scroll" id="categoryList">
-            <!-- Categorias inseridas via JS -->
-        </div>
+        <div class="container nav-scroll" id="categoryList"></div>
     </nav>
 
     <main class="container">
         <div id="productGrid" class="product-grid"></div>
     </main>
 
-    <!-- MODAL ADMINISTRATIVO -->
     <div id="adminModal" class="modal">
         <div class="modal-content">
-            <h2>Cadastrar Novo Produto</h2>
+            <h2 style="color:white; margin-bottom:15px">Novo Produto</h2>
             <form id="productForm">
-                <input type="hidden" id="productId">
+                <div class="form-group"><input type="text" id="pName" placeholder="Nome" required></div>
+                <div class="form-group"><input type="number" step="0.01" id="pPrice" placeholder="Preço" required></div>
+                <div class="form-group"><select id="pCategory"></select></div>
                 <div class="form-group">
-                    <label>Nome do Produto</label>
-                    <input type="text" id="pName" required>
-                </div>
-                <div class="form-group">
-                    <label>Preço (R$)</label>
-                    <input type="number" step="0.01" id="pPrice" required>
-                </div>
-                <div class="form-group">
-                    <label>Categoria</label>
-                    <select id="pCategory"></select>
-                </div>
-                <div class="form-group">
-                    <label>Foto do Produto (Do seu Computador)</label>
+                    <label style="color:gray; font-size:0.8rem">Selecionar Foto da Galeria:</label>
                     <input type="file" id="pImageFile" accept="image/*">
                     <input type="hidden" id="pImage">
                 </div>
-                <div class="form-group">
-                    <label>Descrição (Opcional)</label>
-                    <input type="text" id="pDesc">
-                </div>
-                <button type="submit" class="btn-save-main">Salvar Produto</button>
-                <button type="button" class="btn-close-modal" onclick="closeModal()">Cancelar / Fechar</button>
+                <button type="submit" style="background:var(--primary); color:white; width:100%; padding:12px; border:none; border-radius:5px; cursor:pointer">Salvar Produto</button>
+                <button type="button" class="close-btn" style="background:none; border:none; color:gray; width:100%; margin-top:10px; cursor:pointer">Cancelar</button>
             </form>
-
-            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #334155;">
-            <h3>Produtos Atuais</h3>
-            <div id="adminProductList" style="margin-top: 10px;"></div>
         </div>
     </div>
-
-    <footer>
-        <p>&copy; 2026 MultiversoGeek - Catálogo Digital</p>
-    </footer>
 
     <script src="script.js"></script>
 </body>
