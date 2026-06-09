@@ -53,9 +53,14 @@ header {
 }
 
 .main-logo {
-    height: 50px; /* AJUSTE AQUI O TAMANHO DA SUA LOGO */
-    width: auto;
+    height: auto;        /* Deixa a altura ser automática */
+    max-height: 100px;   /* Aumentamos de 50px para 100px (ajuste se precisar de mais) */
+    width: auto;         /* Mantém a proporção da largura */
+    max-width: 250px;    /* Garante que não vai ocupar a tela toda */
     object-fit: contain;
+    display: block;
+    margin: 5px 0;
+}
 }
 
 .search-bar {
