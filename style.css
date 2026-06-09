@@ -50,9 +50,9 @@ header {
 
 .main-logo {
     height: auto !important;      /* Força a altura ser automática */
-    max-height: 120px !important; /* Aumentei para 120px - quase 3x o que estava antes */
+    max-height: 200px !important; /* Aumentei para 120px - quase 3x o que estava antes */
     width: auto;
-    max-width: 300px;             /* Permite que ela seja larga também */
+    max-width: 330px;             /* Permite que ela seja larga também */
     object-fit: contain;
     display: block;
 }
@@ -60,7 +60,7 @@ header {
 
 .search-bar {
     flex: 1;
-    max-width: 500px;
+    max-width: 550px;
 }
 
 .search-bar input {
