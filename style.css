@@ -29,37 +29,32 @@ body {
     padding: 0 20px;
 }
 
-/* Header e Logo */
+/* Ajuste do Cabeçalho para aceitar logos maiores */
 header {
     background: rgba(15, 23, 42, 0.9);
     backdrop-filter: blur(10px);
-    padding: 15px 0;
+    padding: 20px 0; /* Aumentei o respiro em cima e embaixo */
     position: sticky;
     top: 0;
     z-index: 100;
     border-bottom: 1px solid #334155;
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
+    min-height: 80px; /* Garante uma altura mínima para o topo */
 }
 
 .logo-container {
     display: flex;
     align-items: center;
+    text-decoration: none;
+    min-width: 150px; /* Garante um espaço mínimo na largura */
 }
 
 .main-logo {
-    height: auto;        /* Deixa a altura ser automática */
-    max-height: 200px;   /* Aumentamos de 50px para 100px (ajuste se precisar de mais) */
-    width: auto;         /* Mantém a proporção da largura */
-    max-width: 250px;    /* Garante que não vai ocupar a tela toda */
+    height: auto !important;      /* Força a altura ser automática */
+    max-height: 120px !important; /* Aumentei para 120px - quase 3x o que estava antes */
+    width: auto;
+    max-width: 300px;             /* Permite que ela seja larga também */
     object-fit: contain;
     display: block;
-    margin: 5px 0;
 }
 }
 
