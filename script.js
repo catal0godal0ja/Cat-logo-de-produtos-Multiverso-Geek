@@ -13,6 +13,7 @@ function init() {
     renderProducts();
     setupAdminLogic();
     setupImageUpload();
+    createExportButton(); // <-- Adicionamos essa linha aqui
 }
 
 // LOGICA DA SENHA admgeek
@@ -114,3 +115,27 @@ document.getElementById('productForm').onsubmit = (e) => {
 };
 
 init();
+
+// ESSA FUNÇÃO CRIA O BOTÃO VERDE DENTRO DA ENGRENAGEM
+function createExportButton() {
+    const modalContent = document.querySelector('.modal-content');
+    
+    const exportBtn = document.createElement('button');
+    exportBtn.textContent = "📦 Gerar Código para Clientes";
+    exportBtn.className = "btn-save-main"; // Usa a mesma cor vermelha do seu CSS
+    exportBtn.style.marginTop = "20px";
+    exportBtn.style.background = "#059669"; // Cor Verde para destacar
+    
+    exportBtn.onclick = () => {
+        const code = JSON.stringify(products, null, 4);
+        const textArea = document.createElement('textarea');
+        textArea.value = code;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert('CÓDIGO COPIADO!\n\nAgora você deve ir no GitHub, abrir o script.js e colar esse código dentro de: const officialProducts = [ ... ];');
+    };
+    
+    modalContent.appendChild(exportBtn);
+}
