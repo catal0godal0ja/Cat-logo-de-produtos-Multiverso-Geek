@@ -3,7 +3,7 @@ const WHATSAPP_NUMBER = "5555991850704"; // <--- COLOQUE SEU NUMERO AQUI
 const IMGBB_API_KEY = "3ba2252edeb63a50d54f3fe65e42fef4"; // <--- SUA CHAVE API APLICADA
 
 const officialProducts = []; 
-const initialCategories = ["Mangás", "HQs", "Livros", "Pokémon TCG", "TCGs Colecionáveis", "Action Figures", "Funko Pop", "Videogames", "Eletrônicos", "Colecionáveis", "Acessórios"];
+const initialCategories = ["Mangás", "HQs", "Livros", "Pokémon TCG", "Card Games", "Snacks", "Action Figures", "Funko Pop", "Videogames", "Eletrônicos", "Colecionáveis", "Acessórios"];
 
 let products = JSON.parse(localStorage.getItem('multiversoGeek_products')) || officialProducts;
 let currentCategory = 'todos';
