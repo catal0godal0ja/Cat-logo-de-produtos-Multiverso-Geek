@@ -1,6 +1,5 @@
-// CONFIGURAÇÕES
-const WHATSAPP_NUMBER = "5555991850704"; // <--- COLOQUE SEU NUMERO AQUI
-const IMGBB_API_KEY = "3ba2252edeb63a50d54f3fe65e42fef4"; // <--- SUA CHAVE API APLICADA
+const WHATSAPP_NUMBER = "5555991850704"; 
+const IMGBB_API_KEY = "3ba2252edeb63a50d54f3fe65e42fef4"; 
 
 const officialProducts = []; 
 const initialCategories = ["Mangás", "HQs", "Livros", "Pokémon TCG", "Card Games", "Snacks", "Action Figures", "Funko Pop", "Videogames", "Eletrônicos", "Colecionáveis", "Acessórios"];
@@ -13,10 +12,8 @@ function init() {
     renderProducts();
     setupAdminLogic();
     setupImageUpload();
-    createExportButton(); // <-- Adicionamos essa linha aqui
 }
 
-// LOGICA DA SENHA admgeek
 function setupAdminLogic() {
     const adminBtn = document.getElementById('openAdmin');
     const searchInput = document.getElementById('searchInput');
@@ -28,38 +25,66 @@ function setupAdminLogic() {
         }
     });
 
-    adminBtn.onclick = () => document.getElementById('adminModal').style.display = 'block';
-    document.querySelector('.close-btn').onclick = () => document.getElementById('adminModal').style.display = 'none';
+    adminBtn.onclick = () => {
+        document.getElementById('adminModal').style.display = 'block';
+        renderAdminTable(); // Carrega a lista de apagar quando abre o modal
+    };
+    
+    document.querySelector('.close-btn').onclick = () => {
+        document.getElementById('adminModal').style.display = 'none';
+    };
 }
 
-// UPLOAD AUTOMÁTICO PARA O IMGBB
+function renderAdminTable() {
+    const list = document.getElementById('adminProductList');
+    if (!list) return;
+
+    if (products.length === 0) {
+        list.innerHTML = '<p style="color:gray; font-size:0.8rem">Nenhum produto cadastrado.</p>';
+        return;
+    }
+
+    list.innerHTML = products.map(p => `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#1e293b; padding:10px; margin-bottom:8px; border-radius:8px;">
+            <div style="display:flex; align-items:center; gap:10px">
+                <img src="${p.image}" style="width:30px; height:30px; object-fit:cover; border-radius:4px">
+                <span style="color:white; font-size:0.8rem; font-weight:bold">${p.name}</span>
+            </div>
+            <button onclick="deleteProduct(${p.id})" style="background:#ff4757; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:0.7rem; font-weight:bold">APAGAR</button>
+        </div>
+    `).join('');
+}
+
+function deleteProduct(id) {
+    if (confirm('Deseja realmente apagar este produto?')) {
+        // Remove o produto da lista
+        products = products.filter(p => p.id !== id);
+        // Salva a nova lista na memória do navegador
+        localStorage.setItem('multiversoGeek_products', JSON.stringify(products));
+        // Atualiza a vitrine e a lista do administrador na hora
+        renderProducts();
+        renderAdminTable();
+    }
+}
+
+// RESTANTE DAS FUNÇÕES (IGUAL ANTERIOR)
 function setupImageUpload() {
     const fileInput = document.getElementById('pImageFile');
     const hiddenUrlInput = document.getElementById('pImage');
-
     fileInput.addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (!file) return;
-
-        alert("Carregando imagem na nuvem... Aguarde um instante.");
-
+        alert("Enviando foto...");
         const formData = new FormData();
         formData.append("image", file);
-
-        fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-            method: "POST",
-            body: formData
-        })
+        fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData })
         .then(res => res.json())
         .then(data => {
             if (data.success) {
                 hiddenUrlInput.value = data.data.url;
-                alert("Foto carregada com sucesso! Você já pode salvar o produto.");
-            } else {
-                alert("Erro ao subir imagem. Verifique a chave API.");
+                alert("Foto carregada!");
             }
-        })
-        .catch(() => alert("Erro de conexão."));
+        });
     });
 }
 
@@ -84,14 +109,13 @@ function renderProducts() {
     const grid = document.getElementById('productGrid');
     const term = document.getElementById('searchInput').value.toLowerCase();
     const filtered = products.filter(p => (currentCategory === 'todos' || p.category === currentCategory) && p.name.toLowerCase().includes(term));
-
     grid.innerHTML = filtered.map(p => `
         <div class="product-card">
-            <img src="${p.image}" class="product-img" onerror="this.src='https://via.placeholder.com/300?text=Sem+Imagem'">
+            <img src="${p.image}" class="product-img" onerror="this.src='https://via.placeholder.com/300'">
             <div class="product-info">
                 <h3>${p.name}</h3>
                 <div class="product-price">R$ ${parseFloat(p.price).toFixed(2).replace('.', ',')}</div>
-                <a href="https://wa.me/${WHATSAPP_NUMBER}?text=Tenho interesse no: ${p.name}" target="_blank" class="btn-buy-zap">WhatsApp</a>
+                <a href="https://wa.me/${WHATSAPP_NUMBER}?text=Interesse: ${p.name}" target="_blank" class="btn-buy-zap">WhatsApp</a>
             </div>
         </div>
     `).join('');
@@ -109,33 +133,25 @@ document.getElementById('productForm').onsubmit = (e) => {
     products.push(newProd);
     localStorage.setItem('multiversoGeek_products', JSON.stringify(products));
     renderProducts();
+    renderAdminTable();
     document.getElementById('productForm').reset();
-    document.getElementById('adminModal').style.display = 'none';
     alert('Salvo!');
 };
 
 init();
 
-// ESSA FUNÇÃO CRIA O BOTÃO VERDE DENTRO DA ENGRENAGEM
-function createExportButton() {
-    const modalContent = document.querySelector('.modal-content');
-    
-    const exportBtn = document.createElement('button');
-    exportBtn.textContent = "📦 Gerar Código para Clientes";
-    exportBtn.className = "btn-save-main"; // Usa a mesma cor vermelha do seu CSS
-    exportBtn.style.marginTop = "20px";
-    exportBtn.style.background = "#059669"; // Cor Verde para destacar
-    
-    exportBtn.onclick = () => {
-        const code = JSON.stringify(products, null, 4);
-        const textArea = document.createElement('textarea');
-        textArea.value = code;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        alert('CÓDIGO COPIADO!\n\nAgora você deve ir no GitHub, abrir o script.js e colar esse código dentro de: const officialProducts = [ ... ];');
-    };
-    
-    modalContent.appendChild(exportBtn);
-}
+// BOTÃO DE EXPORTAR (AQUELE QUE CRIA O CÓDIGO PRO GITHUB)
+const exportBtn = document.createElement('button');
+exportBtn.textContent = "📦 Gerar Código para Clientes";
+exportBtn.style = "background:#059669; color:white; padding:12px; width:100%; border:none; border-radius:5px; cursor:pointer; font-weight:bold; margin-top:15px;";
+exportBtn.onclick = () => {
+    const code = JSON.stringify(products, null, 4);
+    const textArea = document.createElement('textarea');
+    textArea.value = code;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    alert('CÓDIGO COPIADO! Cole no officialProducts do GitHub.');
+};
+document.querySelector('.modal-content').appendChild(exportBtn);
