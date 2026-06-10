@@ -27,12 +27,11 @@
         <div id="productGrid" class="product-grid"></div>
     </main>
 
-    <!-- MODAL ADMINISTRATIVO COM LISTA DE GERENCIAMENTO -->
+    <!-- 1. MODAL ADMINISTRATIVO (CADASTRAR E APAGAR) -->
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <h2 style="color:white; margin-bottom:15px">Novo Produto</h2>
             
-            <!-- Formulário de Cadastro -->
             <form id="productForm">
                 <div class="form-group">
                     <input type="text" id="pName" placeholder="Nome do Produto" required>
@@ -52,12 +51,27 @@
                 <button type="button" class="close-btn" style="background:none; border:none; color:gray; width:100%; margin-top:10px; cursor:pointer">Fechar Janela</button>
             </form>
 
-            <!-- ESPAÇO PARA APAGAR PRODUTOS (NOVO) -->
             <hr style="margin: 20px 0; border: 0; border-top: 1px solid #334155;">
             <h3 style="color:white; margin-bottom:10px; font-size: 1rem;">Gerenciar/Apagar Produtos</h3>
             <div id="adminProductList">
-                <!-- A lista com botões de APAGAR aparecerá aqui via JavaScript -->
+                <!-- Lista via JS -->
             </div>
+        </div>
+    </div>
+
+    <!-- 2. NOVO: MODAL DE VISUALIZAÇÃO (VER DETALHES DO PRODUTO) -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content" style="max-width: 600px; text-align: center;">
+            <span class="close-view" style="float:right; cursor:pointer; color:gray; font-size:25px;">&times;</span>
+            <img id="viewImage" style="width:100%; max-height:400px; object-fit:contain; border-radius:10px; margin-bottom:15px; background:white;">
+            <h2 id="viewName" style="color:var(--text-main); margin-bottom:10px;"></h2>
+            <p id="viewCategory" style="color:var(--primary); font-weight:bold; text-transform:uppercase; font-size:0.8rem; margin-bottom:10px;"></p>
+            <div id="viewPrice" style="font-size:1.8rem; font-weight:800; color:var(--text-main); margin-bottom:15px;"></div>
+            <p id="viewDesc" style="color:var(--text-muted); margin-bottom:20px; line-height:1.4;"></p>
+            
+            <a id="viewZap" href="#" target="_blank" class="btn-buy-zap" style="font-size:1.1rem; padding:15px;">
+                Confirmar Interesse via WhatsApp
+            </a>
         </div>
     </div>
 
