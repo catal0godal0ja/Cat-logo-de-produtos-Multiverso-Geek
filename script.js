@@ -14,6 +14,7 @@ function init() {
     setupImageUpload();
 }
 
+// LÓGICA DO ADMINISTRADOR E SENHA
 function setupAdminLogic() {
     const adminBtn = document.getElementById('openAdmin');
     const searchInput = document.getElementById('searchInput');
@@ -27,14 +28,42 @@ function setupAdminLogic() {
 
     adminBtn.onclick = () => {
         document.getElementById('adminModal').style.display = 'block';
-        renderAdminTable(); // Carrega a lista de apagar quando abre o modal
+        renderAdminTable(); 
     };
     
+    // Fechar Modal Admin
     document.querySelector('.close-btn').onclick = () => {
         document.getElementById('adminModal').style.display = 'none';
     };
 }
 
+// SALVAR NOVO PRODUTO (COM DESCRIÇÃO)
+document.getElementById('productForm').onsubmit = (e) => {
+    e.preventDefault();
+    
+    const newProd = {
+        id: Date.now(),
+        name: document.getElementById('pName').value,
+        price: document.getElementById('pPrice').value,
+        category: document.getElementById('pCategory').value,
+        image: document.getElementById('pImage').value,
+        description: document.getElementById('pDesc').value // PEGA A DESCRIÇÃO
+    };
+
+    products.push(newProd);
+    localStorage.setItem('multiversoGeek_products', JSON.stringify(products));
+    
+    renderProducts();
+    renderAdminTable();
+    
+    // Limpar campos e fechar
+    document.getElementById('productForm').reset();
+    document.getElementById('pDesc').value = ''; 
+    document.getElementById('adminModal').style.display = 'none';
+    alert('Produto salvo com sucesso!');
+};
+
+// TABELA DE GERENCIAMENTO (APAGAR)
 function renderAdminTable() {
     const list = document.getElementById('adminProductList');
     if (!list) return;
@@ -57,17 +86,14 @@ function renderAdminTable() {
 
 function deleteProduct(id) {
     if (confirm('Deseja realmente apagar este produto?')) {
-        // Remove o produto da lista
         products = products.filter(p => p.id !== id);
-        // Salva a nova lista na memória do navegador
         localStorage.setItem('multiversoGeek_products', JSON.stringify(products));
-        // Atualiza a vitrine e a lista do administrador na hora
         renderProducts();
         renderAdminTable();
     }
 }
 
-// RESTANTE DAS FUNÇÕES (IGUAL ANTERIOR)
+// UPLOAD DE IMAGEM
 function setupImageUpload() {
     const fileInput = document.getElementById('pImageFile');
     const hiddenUrlInput = document.getElementById('pImage');
@@ -88,13 +114,14 @@ function setupImageUpload() {
     });
 }
 
+// CATEGORIAS
 function renderCategories() {
     const list = document.getElementById('categoryList');
     const select = document.getElementById('pCategory');
     list.innerHTML = `<button class="cat-btn active" onclick="filterCat('todos', this)">Todos</button>`;
     initialCategories.forEach(cat => {
         list.innerHTML += `<button class="cat-btn" onclick="filterCat('${cat}', this)">${cat}</button>`;
-        select.innerHTML += `<option value="${cat}">${cat}</option>`;
+        if(select) select.innerHTML += `<option value="${cat}">${cat}</option>`;
     });
 }
 
@@ -105,6 +132,7 @@ function filterCat(cat, btn) {
     renderProducts();
 }
 
+// EXIBIR PRODUTOS NA VITRINE
 function renderProducts() {
     const grid = document.getElementById('productGrid');
     const term = document.getElementById('searchInput').value.toLowerCase();
@@ -124,26 +152,26 @@ function renderProducts() {
     `).join('');
 }
 
-document.getElementById('productForm').onsubmit = (e) => {
-    e.preventDefault();
-    const newProd = {
-        id: Date.now(),
-        name: document.getElementById('pName').value,
-        price: document.getElementById('pPrice').value,
-        category: document.getElementById('pCategory').value,
-        image: document.getElementById('pImage').value
-    };
-    products.push(newProd);
-    localStorage.setItem('multiversoGeek_products', JSON.stringify(products));
-    renderProducts();
-    renderAdminTable();
-    document.getElementById('productForm').reset();
-    alert('Salvo!');
-};
+// VER DETALHES DO PRODUTO (MODAL DO CLIENTE)
+function verDetalhes(id) {
+    const p = products.find(prod => prod.id == id);
+    if (!p) return;
 
-init();
+    document.getElementById('viewImage').src = p.image;
+    document.getElementById('viewName').innerText = p.name;
+    document.getElementById('viewPrice').innerText = `R$ ${parseFloat(p.price).toFixed(2).replace('.', ',')}`;
+    
+    // Mostra a descrição ou aviso se estiver vazio
+    document.getElementById('viewDesc').innerText = p.description || "Sem descrição disponível.";
 
-// BOTÃO DE EXPORTAR (AQUELE QUE CRIA O CÓDIGO PRO GITHUB)
+    // Link do WhatsApp
+    const msg = encodeURIComponent(`Olá! Gostaria de mais informações sobre o produto: ${p.name}`);
+    document.getElementById('viewZap').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+
+    document.getElementById('viewModal').style.display = 'block';
+}
+
+// BOTÃO DE EXPORTAR (GERAR CÓDIGO)
 const exportBtn = document.createElement('button');
 exportBtn.textContent = "📦 Gerar Código para Clientes";
 exportBtn.style = "background:#059669; color:white; padding:12px; width:100%; border:none; border-radius:5px; cursor:pointer; font-weight:bold; margin-top:15px;";
@@ -159,30 +187,11 @@ exportBtn.onclick = () => {
 };
 document.querySelector('.modal-content').appendChild(exportBtn);
 
-// Função para abrir os detalhes do produto
-function verDetalhes(id) {
-    const p = products.find(prod => prod.id == id);
-    if (!p) return;
-
-    document.getElementById('viewImage').src = p.image;
-    document.getElementById('viewName').innerText = p.name;
-    document.getElementById('viewCategory').innerText = p.category;
-    document.getElementById('viewPrice').innerText = `R$ ${parseFloat(p.price).toFixed(2).replace('.', ',')}`;
-    document.getElementById('viewDesc').innerText = p.description || "Sem descrição disponível.";
-    
-    // Ajusta o link do Zap
-    const msg = encodeURIComponent(`Olá! Gostaria de mais informações sobre o produto: ${p.name}`);
-    document.getElementById('viewZap').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
-
-    document.getElementById('viewModal').style.display = 'block';
-}
-
-// Fechar o modal de detalhes
+// FECHAR MODAIS
 document.querySelector('.close-view').onclick = () => {
     document.getElementById('viewModal').style.display = 'none';
 };
 
-// Fechar se clicar fora da imagem
 window.onclick = (event) => {
     if (event.target == document.getElementById('viewModal')) {
         document.getElementById('viewModal').style.display = 'none';
@@ -191,3 +200,5 @@ window.onclick = (event) => {
         document.getElementById('adminModal').style.display = 'none';
     }
 };
+
+init();
