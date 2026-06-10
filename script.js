@@ -2,22 +2,7 @@
 const WHATSAPP_NUMBER = "5555991850704"; // <--- COLOQUE SEU NUMERO AQUI
 const IMGBB_API_KEY = "3ba2252edeb63a50d54f3fe65e42fef4"; // <--- SUA CHAVE API APLICADA
 
-const officialProducts = [
-    {
-        "id": 1781051402537,
-        "name": "goku feio",
-        "price": "2.99",
-        "category": "Action Figures",
-        "image": "https://i.ibb.co/0V1sFVvr/1vnrl8vc05z21.jpg"
-    },
-    {
-        "id": 1781051450166,
-        "name": "oko",
-        "price": "47.99",
-        "category": "Mangás",
-        "image": "https://i.ibb.co/qLf9TdW0/4b75f7a56dac5b9b69f67c089dfa1593.jpg"
-    }
-]; 
+const officialProducts = []; 
 const initialCategories = ["Mangás", "HQs", "Livros", "Pokémon TCG", "Card Games", "Snacks", "Action Figures", "Funko Pop", "Videogames", "Eletrônicos", "Colecionáveis", "Acessórios"];
 
 let products = JSON.parse(localStorage.getItem('multiversoGeek_products')) || officialProducts;
