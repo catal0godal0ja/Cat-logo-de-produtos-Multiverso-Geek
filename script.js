@@ -108,14 +108,17 @@ function filterCat(cat, btn) {
 function renderProducts() {
     const grid = document.getElementById('productGrid');
     const term = document.getElementById('searchInput').value.toLowerCase();
+    
     const filtered = products.filter(p => (currentCategory === 'todos' || p.category === currentCategory) && p.name.toLowerCase().includes(term));
+
     grid.innerHTML = filtered.map(p => `
-        <div class="product-card">
-            <img src="${p.image}" class="product-img" onerror="this.src='https://via.placeholder.com/300'">
+        <div class="product-card" onclick="verDetalhes(${p.id})" style="cursor:pointer">
+            <img src="${p.image}" class="product-img" onerror="this.src='https://via.placeholder.com/300?text=Sem+Imagem'">
             <div class="product-info">
+                <small style="color:var(--text-main); opacity:0.7">${p.category}</small>
                 <h3>${p.name}</h3>
                 <div class="product-price">R$ ${parseFloat(p.price).toFixed(2).replace('.', ',')}</div>
-                <a href="https://wa.me/${WHATSAPP_NUMBER}?text=Interesse: ${p.name}" target="_blank" class="btn-buy-zap">WhatsApp</a>
+                <div style="margin-top:10px; color:var(--primary); font-weight:bold; font-size:0.8rem">Ver mais detalhes...</div>
             </div>
         </div>
     `).join('');
@@ -155,3 +158,36 @@ exportBtn.onclick = () => {
     alert('CÓDIGO COPIADO! Cole no officialProducts do GitHub.');
 };
 document.querySelector('.modal-content').appendChild(exportBtn);
+
+// Função para abrir os detalhes do produto
+function verDetalhes(id) {
+    const p = products.find(prod => prod.id == id);
+    if (!p) return;
+
+    document.getElementById('viewImage').src = p.image;
+    document.getElementById('viewName').innerText = p.name;
+    document.getElementById('viewCategory').innerText = p.category;
+    document.getElementById('viewPrice').innerText = `R$ ${parseFloat(p.price).toFixed(2).replace('.', ',')}`;
+    document.getElementById('viewDesc').innerText = p.description || "Sem descrição disponível.";
+    
+    // Ajusta o link do Zap
+    const msg = encodeURIComponent(`Olá! Gostaria de mais informações sobre o produto: ${p.name}`);
+    document.getElementById('viewZap').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+
+    document.getElementById('viewModal').style.display = 'block';
+}
+
+// Fechar o modal de detalhes
+document.querySelector('.close-view').onclick = () => {
+    document.getElementById('viewModal').style.display = 'none';
+};
+
+// Fechar se clicar fora da imagem
+window.onclick = (event) => {
+    if (event.target == document.getElementById('viewModal')) {
+        document.getElementById('viewModal').style.display = 'none';
+    }
+    if (event.target == document.getElementById('adminModal')) {
+        document.getElementById('adminModal').style.display = 'none';
+    }
+};
